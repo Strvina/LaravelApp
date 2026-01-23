@@ -1,0 +1,23 @@
+app -> sva logika(kontroleri, modeli itd)
+config -> konfiguracioni fajlovi
+database -> migracije(pravis tabele s njima)
+         -> seederi(za punjenje baze sa defoltnim podacima, random podaci itd)
+public -> sve cemu korisnik moze da pristupi(html, css, slike itd)
+resources -> development fajlovi tj originalni fajlovi npr ako imam .sccs to je originalni a public/css je prevedeni tj ne originalni
+          -> views(html sadrzaj stranice, sbe ono sto krajn korisnik vidi)
+                ->blade fajlovi(templating sistem)
+routes -> putanje na sajtu -> /contact /kursevi itd
+storage -> slike, video klipovi sve sto ima kao neki vid originalnog storagea
+
+NAJBITNIJE STVARI ZA ZNATI SU APP, DATABASE, RESOURCES, ROUTES
+
+PRIMER:
+kako bi radili samo phpom:
+index.php ->logika i tu nastaje problem nemam jasni kazatelj
+ gde nam je logika gde html itd i sve stoju u index.php i to je problem
+
+Laravel to resava ovako:
+-> create route(putanja)
+-> controller(odlucuje sve, sta cemo videti na stranici, da li mi mozemo da vidimo itd)
+-> view(ono sto korisnik vidi sto je odluceno u controlleru)
+
