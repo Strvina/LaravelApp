@@ -3,12 +3,13 @@
 namespace App\Http\Controllers;
 use App\Models\ToDo;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ToDoController extends Controller
 {
     public function index()
     {
-        $todo = ToDo::all();
+        $todo = ToDo::where('user_id', Auth::id())->get();
         return view("pages.todo.index", compact("todo"));
     }
 
@@ -16,18 +17,29 @@ class ToDoController extends Controller
     {
         //validacija
         $request->validate([
-            "task" => "required|min:3|max:255"
+            "task" => "required|min:3|max:255",
+            "priority" => "required|in:low,medium,high",
+            "is_recurring" => "nullable|boolean",
+            "recurrence" => "nullable|in:daily,weekly,monthly",
         ]);
 
         //sacuvati u bazu
-        ToDo::create($request->all());
+        ToDo::create([
+            "task" => $request->task,
+            "status" => "pending",
+            "user_id" => Auth::id(),
+            "priority" => "$request->priority",
+            "is_recurring" => $request->is_recurring ? true : false,
+            "recurrence" => $request->recurrence,
+            "last_generated_at" => null,
+        ]);
 
         //preusmeriti nazad na todo stranu
         return redirect()->route("todo.index");
     }
     public function delete($id)
     {
-        $todo = ToDo::find($id);
+        $todo = ToDo::whereUserId(Auth::id())->whereKey($id)->firstOrFail();
         $todo->delete();
         return redirect()->route("todo.index");
     }
@@ -38,8 +50,9 @@ class ToDoController extends Controller
         'status' => 'required|in:pending,in_progress,completed',
     ]);
 
-    $task = ToDo::findOrFail($id);
+    $task = ToDo::whereUserId(Auth::id())->whereKey($id)->firstOrFail();
     $task->status = $request->status;
+    
     $task->save();
 
     return response()->json(['success' => true]);

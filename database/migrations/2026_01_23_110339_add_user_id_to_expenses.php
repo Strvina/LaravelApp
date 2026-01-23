@@ -11,11 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create("ToDo", function (Blueprint $table) {
-            $table->id();
-            $table->string("task");
-            $table->enum("status", ["pending", "in_progress", "completed"])->default("pending");
-            $table->timestamps();
+        Schema::table('expenses', function (Blueprint $table) {
+            $table->foreignId('user_id')->after('id')->cascadeOnDelete();
         });
     }
 
@@ -24,6 +21,9 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists("ToDo");
+        Schema::table('expenses', function (Blueprint $table) {
+            $table->dropForeign(['user_id']);
+            $table->dropColumn('user_id');
+        });
     }
 };

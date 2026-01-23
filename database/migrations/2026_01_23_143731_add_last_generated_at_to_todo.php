@@ -6,24 +6,17 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::table('todo', function (Blueprint $table) {
-            $table->foreignId('user_id')->after('id')->constrained()->cascadeOnDelete();
+            $table->date('last_generated_at')->nullable()->after('recurrence');
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::table('todo', function (Blueprint $table) {
-            $table->dropForeign(['user_id']);
-            $table->dropColumn('user_id');
+            $table->dropColumn('last_generated_at');
         });
     }
 };

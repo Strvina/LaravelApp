@@ -24,8 +24,9 @@
                     </a>
                 </li>
                 <li>
-                    <a href="{{ route('contact') }}"
-                        class="text-gray-600 hover:text-blue-600 font-semibold transition-colors">
+                    <a href="{{ route('contact.index') }}"
+                        class="font-semibold transition-colors
+                            {{ request()->routeIs('contact.index') ? 'text-blue-600 border-b-2 border-blue-500 pb-1' : 'text-gray-600 hover:text-blue-600' }}">
                         Kontakt
                     </a>
                 </li>
