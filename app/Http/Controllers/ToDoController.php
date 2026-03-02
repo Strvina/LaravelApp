@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Models\ToDo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\StoreToDoRequest;
 
 class ToDoController extends Controller
 {
@@ -13,16 +14,8 @@ class ToDoController extends Controller
         return view("pages.todo.index", compact("todo"));
     }
 
-    public function addTodo(Request $request)
+    public function addTodo(StoreToDoRequest $request)
     {
-        //validacija
-        $request->validate([
-            "task" => "required|min:3|max:255",
-            "priority" => "required|in:low,medium,high",
-            "is_recurring" => "nullable|boolean",
-            "recurrence" => "nullable|in:daily,weekly,monthly",
-        ]);
-
         //sacuvati u bazu
         ToDo::create([
             "task" => $request->task,
@@ -52,7 +45,7 @@ class ToDoController extends Controller
 
     $task = ToDo::whereUserId(Auth::id())->whereKey($id)->firstOrFail();
     $task->status = $request->status;
-    
+
     $task->save();
 
     return response()->json(['success' => true]);

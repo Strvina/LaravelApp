@@ -13,7 +13,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule): void
     {
         // Zakazuje recurring tasks command da se izvršava svaki dan u ponoć
-        $schedule->command('app:generate-recurring-tasks')->daily();
+            $schedule->command('app:generate-recurring-tasks')->daily();
 
         // Ako želiš, možeš za testiranje da ga pokrećeš svakih 5 minuta
         //$schedule->command('app:generate-recurring-tasks')->everyMinute();

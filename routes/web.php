@@ -31,7 +31,7 @@ Route::post('/contact/send', [ContactController::class, 'send'])->name('contact.
 Route::get('/pages/todo', [ToDoController::class, 'index'])->name('todo.index');
 Route::post('/pages/todo/save', [ToDoController::class, 'addTodo'])->name('todo.save');
 Route::get('/pages/todo/delete/{id}', [ToDoController::class, 'delete'])->name('todo.delete');
-Route::patch('/pages/todo/update-status/{id}', [ToDoController::class, 'updateStatus']);
+Route::patch('/pages/todo/update-status/{id}', [ToDoController::class, 'updateStatus'])->name('todo.updateStatus');
 Route::get('/pages/expenses', [ExpenseController::class, 'index'])->name('expenses.index');
 Route::post('/pages/expenses/add', [ExpenseController::class, 'addExpense'])->name('expenses.add');
 Route::delete('/pages/expenses/delete/{id}', [ExpenseController::class, 'deleteExpense'])->name('expenses.delete');

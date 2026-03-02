@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Http\Requests\StoreExpenseRequest;
 use App\Models\Expense;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -31,15 +32,8 @@ class ExpenseController extends Controller
         ));
     }
 
-    public function addExpense(Request $request)
+    public function addExpense(StoreExpenseRequest $request)
     {
-        $request->validate([
-            "name"=>"required|string|max:255",
-            "amount"=>"required|numeric",
-            "type"=>"required|in:income,expense",
-            "date"=>"required|date"
-        ]);
-
         Expense::create([
             "name"=>$request->name,
             "amount"=>$request->amount,
