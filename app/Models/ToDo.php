@@ -23,4 +23,21 @@ class ToDo extends Model
     {
         return $this->belongsTo(User::class);
     }
+    // Scope vraca sve zadatke koje korisnik poseduje
+    public function scopeOwnedBy($query, $userId)
+    {
+        return $query->where('user_id', $userId);
+    }
+
+    // Scope za traženje zadatka po ID i korisnik
+    public function scopeOwnedByKey($query, $userId, $id)
+    {
+        return $query->where('user_id', $userId)->whereKey($id);
+    }
+
+    // Scope za filter po statusu (opcionalno)
+    public function scopeStatus($query, $status)
+    {
+        return $query->where('status', $status);
+    }
 }
