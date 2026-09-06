@@ -12,7 +12,7 @@
         </div>
 
         <div class="panel max-w-4xl">
-            <form action="{{ route('product.update', $product->id) }}" method="POST" class="grid gap-4 md:grid-cols-2">
+            <form action="{{ route('product.update', $product->id) }}" method="POST" enctype="multipart/form-data" class="grid gap-4 md:grid-cols-2">
                 @csrf
                 @method('PUT')
 
@@ -62,6 +62,17 @@
                     <label for="description" class="field-label">Description</label>
                     <textarea id="description" name="description" rows="5" class="text-input">{{ old('description', $product->description) }}</textarea>
                     @error('description')
+                        <p class="field-error">{{ $message }}</p>
+                    @enderror
+                </div>
+                <div class="md:col-span-2">
+                    <label for="image" class="field-label">Product image</label>
+                    @if ($product->image_url)
+                        <img src="{{ $product->image_url }}" alt="{{ $product->name }}" class="mb-3 h-32 w-32 rounded-2xl border border-slate-200 object-cover">
+                    @endif
+                    <input id="image" name="image" type="file" accept="image/*" class="text-input">
+                    <p class="mt-2 text-xs text-slate-500">Optional. Uploading a new image replaces the current one.</p>
+                    @error('image')
                         <p class="field-error">{{ $message }}</p>
                     @enderror
                 </div>

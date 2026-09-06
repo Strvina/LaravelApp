@@ -1,6 +1,14 @@
 @forelse ($products as $product)
     <article class="panel flex h-full flex-col justify-between">
         <div>
+            @if ($product->image_url)
+                <img src="{{ $product->image_url }}" alt="{{ $product->name }}" class="mb-4 h-40 w-full rounded-2xl object-cover">
+            @else
+                <div class="mb-4 flex h-40 w-full items-center justify-center rounded-2xl bg-slate-100 text-sm font-medium text-slate-400">
+                    No image
+                </div>
+            @endif
+
             <div class="flex items-start justify-between gap-4">
                 <div>
                     <p class="stat-label">{{ $product->category ?: 'General' }}</p>

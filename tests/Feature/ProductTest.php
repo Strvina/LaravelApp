@@ -6,6 +6,7 @@ use App\Models\Products;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
 class ProductTest extends TestCase
@@ -31,6 +32,47 @@ class ProductTest extends TestCase
             'stock' => 10,
             'description' => 'Ovo je test proizvod sa dovoljnim opisom.',
         ]);
+    }
+
+    public function test_admin_can_upload_a_product_image(): void
+    {
+        Storage::fake('public');
+        $user = User::factory()->create(['role' => 'admin']);
+        $image = UploadedFile::fake()->create('product.jpg', 100, 'image/jpeg');
+
+        $response = $this->actingAs($user)->post(route('product.add'), [
+            'name' => 'Proizvod sa slikom',
+            'price' => 150,
+            'stock' => 10,
+            'description' => 'Ovo je test proizvod sa dovoljnim opisom.',
+            'image' => $image,
+        ]);
+
+        $response->assertRedirect();
+
+        $product = Products::where('name', 'Proizvod sa slikom')->firstOrFail();
+        Storage::disk('public')->assertExists($product->image_path);
+        $this->assertNotNull($product->image_url);
+    }
+
+    public function test_replacing_a_product_image_deletes_the_old_one(): void
+    {
+        Storage::fake('public');
+        $admin = User::factory()->create(['role' => 'admin']);
+        $product = Products::factory()->create(['image_path' => 'products/old.jpg']);
+        Storage::disk('public')->put('products/old.jpg', 'fake-content');
+
+        $response = $this->actingAs($admin)->put(route('product.update', $product->id), [
+            'name' => $product->name,
+            'price' => $product->price,
+            'stock' => $product->stock,
+            'description' => $product->description,
+            'image' => UploadedFile::fake()->create('new.jpg', 100, 'image/jpeg'),
+        ]);
+
+        $response->assertRedirect(route('products.all'));
+        Storage::disk('public')->assertMissing('products/old.jpg');
+        Storage::disk('public')->assertExists($product->fresh()->image_path);
     }
 
     public function test_guest_cannot_add_product(): void

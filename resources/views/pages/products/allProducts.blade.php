@@ -26,7 +26,7 @@
                     <p class="mt-2 text-sm text-slate-600">Create a new inventory record with the key details your dashboard uses.</p>
                 </div>
 
-                <form action="{{ route('product.add') }}" method="POST" class="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+                <form action="{{ route('product.add') }}" method="POST" enctype="multipart/form-data" class="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
                     @csrf
 
                     @if ($errors->any())
@@ -67,6 +67,12 @@
                     <div class="md:col-span-2 xl:col-span-3">
                         <label for="description" class="field-label">Description</label>
                         <textarea id="description" name="description" rows="4" class="text-input">{{ old('description') }}</textarea>
+                    </div>
+
+                    <div class="md:col-span-2 xl:col-span-3">
+                        <label for="image" class="field-label">Product image</label>
+                        <input type="file" id="image" name="image" accept="image/*" class="text-input">
+                        <p class="mt-2 text-xs text-slate-500">Optional. JPG/PNG/WebP, up to 2MB.</p>
                     </div>
 
                     <div class="md:col-span-2 xl:col-span-3">

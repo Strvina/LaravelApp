@@ -3,6 +3,10 @@
 @section('content')
     <section class="page-shell">
         <div class="panel">
+            @if ($product->image_url)
+                <img src="{{ $product->image_url }}" alt="{{ $product->name }}" class="mb-8 h-72 w-full rounded-2xl object-cover">
+            @endif
+
             <div class="flex flex-col gap-8 lg:flex-row lg:items-start lg:justify-between">
                 <div class="max-w-2xl">
                     <p class="stat-label">{{ $product->category ?: 'General inventory' }}</p>

@@ -9,6 +9,7 @@
                 <p class="page-subtitle">A management view across users, products, notifications, finance, and recent activity.</p>
             </div>
             <div class="flex flex-wrap gap-3">
+                <a href="/docs/api" class="secondary-btn" target="_blank" rel="noopener">API docs</a>
                 <a href="{{ route('admin.users.index') }}" class="secondary-btn">Manage users</a>
                 <a href="{{ route('admin.activity-logs') }}" class="primary-btn">View activity logs</a>
             </div>

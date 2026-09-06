@@ -8,6 +8,7 @@ use App\Services\ActivityLogService;
 use App\Services\NotificationService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
@@ -68,7 +69,13 @@ class ProductController extends Controller
     {
         $this->authorize('create', Products::class);
 
-        $product = Products::create($request->validated());
+        $data = $request->safe()->except('image');
+
+        if ($request->hasFile('image')) {
+            $data['image_path'] = $request->file('image')->store('products', 'public');
+        }
+
+        $product = Products::create($data);
         NotificationService::createLowStockAlert($product);
 
         ActivityLogService::log(
@@ -96,7 +103,17 @@ class ProductController extends Controller
         $this->authorize('update', $product);
         $oldValues = $product->only(['name', 'slug', 'sku', 'price', 'stock', 'category', 'brand', 'on_sale', 'description']);
 
-        $product->update($request->validated());
+        $data = $request->safe()->except('image');
+
+        if ($request->hasFile('image')) {
+            if ($product->image_path) {
+                Storage::disk('public')->delete($product->image_path);
+            }
+
+            $data['image_path'] = $request->file('image')->store('products', 'public');
+        }
+
+        $product->update($data);
         NotificationService::createLowStockAlert($product);
         NotificationService::resolveLowStockAlert($product);
 
@@ -308,6 +325,10 @@ class ProductController extends Controller
         $product = Products::onlyTrashed()->findOrFail($id);
         $this->authorize('forceDelete', $product);
         $oldValues = $product->only(['name', 'slug', 'sku', 'price', 'stock', 'category', 'brand', 'on_sale', 'description']);
+
+        if ($product->image_path) {
+            Storage::disk('public')->delete($product->image_path);
+        }
 
         $product->forceDelete();
 

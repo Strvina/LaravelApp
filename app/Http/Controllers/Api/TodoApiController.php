@@ -11,6 +11,11 @@ use Illuminate\Http\Request;
 
 class TodoApiController extends Controller
 {
+    /**
+     * List todos
+     *
+     * Admins receive every user's todos; everyone else only sees their own.
+     */
     public function index(Request $request): JsonResponse
     {
         $query = ToDo::query()->latest()->visibleTo($request->user());
@@ -18,6 +23,12 @@ class TodoApiController extends Controller
         return response()->json($query->paginate(15));
     }
 
+    /**
+     * Create a todo
+     *
+     * Creates a new task owned by the authenticated user, starting in the
+     * "pending" status.
+     */
     public function store(StoreToDoRequest $request): JsonResponse
     {
         $todo = ToDo::create([
@@ -31,6 +42,11 @@ class TodoApiController extends Controller
         return response()->json($todo, 201);
     }
 
+    /**
+     * Update a todo
+     *
+     * Owner or admin only.
+     */
     public function update(UpdateToDoRequest $request, ToDo $todo): JsonResponse
     {
         $this->authorize('update', $todo);
@@ -44,6 +60,11 @@ class TodoApiController extends Controller
         return response()->json($todo);
     }
 
+    /**
+     * Move a todo between statuses
+     *
+     * Owner or admin only.
+     */
     public function updateStatus(Request $request, ToDo $todo): JsonResponse
     {
         $this->authorize('update', $todo);
@@ -57,6 +78,11 @@ class TodoApiController extends Controller
         return response()->json($todo);
     }
 
+    /**
+     * Delete a todo
+     *
+     * Soft-deletes the task. Owner or admin only.
+     */
     public function destroy(ToDo $todo): JsonResponse
     {
         $this->authorize('delete', $todo);

@@ -9,6 +9,12 @@ use Illuminate\Http\Request;
 
 class ProductApiController extends Controller
 {
+    /**
+     * List products
+     *
+     * Paginated inventory list, optionally filtered by a `search` term
+     * matched against the product name.
+     */
     public function index(Request $request): JsonResponse
     {
         $query = Products::query()->latest();
