@@ -14,7 +14,7 @@ class ProductApiController extends Controller
         $query = Products::query()->latest();
 
         if ($request->filled('search')) {
-            $query->where('name', 'like', '%' . $request->search . '%');
+            $query->where('name', 'like', '%'.$request->search.'%');
         }
 
         return response()->json($query->paginate(15));

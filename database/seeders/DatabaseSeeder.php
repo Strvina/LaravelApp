@@ -100,7 +100,7 @@ class DatabaseSeeder extends Seeder
                 'brand' => 'WriteLine',
                 'description' => 'Weekly-use notebooks for meetings, planning, and warehouse checklists.',
             ],
-        ])->map(fn(array $product) => Products::create($product));
+        ])->map(fn (array $product) => Products::create($product));
 
         Expense::factory()->count(6)->create(['user_id' => $manager->id, 'type' => 'expense']);
         Expense::factory()->count(4)->create(['user_id' => $manager->id, 'type' => 'income']);

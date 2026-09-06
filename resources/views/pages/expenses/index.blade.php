@@ -143,11 +143,14 @@
                                     </td>
                                     <td class="px-3 py-4 text-slate-600">{{ $expense->date }}</td>
                                     <td class="px-3 py-4">
-                                        <form method="POST" action="{{ route('expenses.delete', $expense) }}">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="danger-btn whitespace-nowrap">Delete</button>
-                                        </form>
+                                        <div class="flex flex-wrap gap-2">
+                                            <a href="{{ route('expenses.edit', $expense->id) }}" class="secondary-btn whitespace-nowrap">Edit</a>
+                                            <form method="POST" action="{{ route('expenses.delete', $expense) }}">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="danger-btn whitespace-nowrap">Delete</button>
+                                            </form>
+                                        </div>
                                     </td>
                                 </tr>
                             @empty

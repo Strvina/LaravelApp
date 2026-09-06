@@ -2,6 +2,4 @@
 
 namespace App\Http\Requests;
 
-class UpdateToDoRequest extends StoreToDoRequest
-{
-}
+class UpdateToDoRequest extends StoreToDoRequest {}

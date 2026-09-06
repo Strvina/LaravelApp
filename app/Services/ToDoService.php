@@ -7,37 +7,29 @@ use Illuminate\Support\Facades\Auth;
 
 class ToDoService
 {
-    // Kreira novi zadatak
-    public static function create(array $data)
+    public static function create(array $data): ToDo
     {
         return ToDo::create([
             'task' => $data['task'],
-            'status' => 'pending',
-            'user_id' => Auth::id(),
+            'status' => $data['status'] ?? 'pending',
+            'user_id' => $data['user_id'] ?? Auth::id(),
             'priority' => $data['priority'],
             'is_recurring' => $data['is_recurring'] ?? false,
-            'recurrence' => $data['recurrence'] ?? null,
-            'last_generated_at' => null,
+            'recurrence' => ($data['is_recurring'] ?? false) ? ($data['recurrence'] ?? null) : null,
         ]);
     }
 
-    // Update statusa zadatka
-    public static function updateStatus(ToDo $todo, string $status)
+    public static function updateStatus(ToDo $todo, string $status): ToDo
     {
-        $todo->status = $status;
-        $todo->save();
-        return $todo;
+        $todo->update([
+            'status' => $status,
+        ]);
+
+        return $todo->fresh();
     }
 
-    // Brisanje zadatka
-    public static function delete(ToDo $todo)
+    public static function delete(ToDo $todo): void
     {
         $todo->delete();
-    }
-
-    // Dohvata sve zadatke određenog korisnika
-    public static function listAllByUser(int $userId)
-    {
-        return ToDo::ownedBy($userId)->orderBy('created_at', 'desc')->get();
     }
 }

@@ -42,7 +42,7 @@
                 </div>
                 <div class="md:col-span-2 flex gap-3">
                     <button type="submit" class="primary-btn">Save changes</button>
-                    <a href="{{ route('product.single', ['productName' => $product->name]) }}" class="secondary-btn">View product</a>
+                    <a href="{{ route('product.single', ['product' => $product->slug]) }}" class="secondary-btn">View product</a>
                 </div>
             </form>
         </div>

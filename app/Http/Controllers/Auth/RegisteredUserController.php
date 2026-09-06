@@ -42,9 +42,10 @@ class RegisteredUserController extends Controller
         ]);
 
         event(new Registered($user));
-        //ova linija odmah uloguje korisnika nakon registracije
-        //ako hocu da menjam da mora manuelno da se loguje nakon registracije ovu liniju ispod brisem
+        // ova linija odmah uloguje korisnika nakon registracije
+        // ako hocu da menjam da mora manuelno da se loguje nakon registracije ovu liniju ispod brisem
         Auth::login($user);
+
         return redirect()->route('dashboard');
     }
 }

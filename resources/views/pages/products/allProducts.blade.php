@@ -10,7 +10,13 @@
                     Browse, filter, and manage product records with category, brand, price-range, and stock-aware views.
                 </p>
             </div>
-            <a href="{{ route('products.export') }}" class="secondary-btn">Export CSV</a>
+            <div class="flex flex-wrap gap-3">
+                @if (auth()->user()->isAdmin())
+                    <a href="{{ route('products.template') }}" class="secondary-btn">Import template</a>
+                    <a href="{{ route('products.trash') }}" class="secondary-btn">Deleted products</a>
+                @endif
+                <a href="{{ route('products.export') }}" class="secondary-btn">Export CSV</a>
+            </div>
         </div>
 
         @if (auth()->user()->isAdmin())
@@ -79,6 +85,13 @@
                     <div class="flex-1">
                         <label for="csv_file" class="field-label">CSV file</label>
                         <input type="file" id="csv_file" name="csv_file" accept=".csv,text/csv" class="text-input">
+                    </div>
+                    <div>
+                        <label for="mode" class="field-label">Mode</label>
+                        <select id="mode" name="mode" class="select-input">
+                            <option value="create">Create only</option>
+                            <option value="upsert">Create &amp; update (match by SKU/name)</option>
+                        </select>
                     </div>
                     <button type="submit" class="primary-btn">Import CSV</button>
                 </form>

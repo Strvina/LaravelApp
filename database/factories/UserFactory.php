@@ -2,10 +2,10 @@
 
 namespace Database\Factories;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
-use App\Models\User;
 
 class UserFactory extends Factory
 {
@@ -26,7 +26,7 @@ class UserFactory extends Factory
 
     public function unverified(): static
     {
-        return $this->state(fn() => [
+        return $this->state(fn () => [
             'email_verified_at' => null,
         ]);
     }

@@ -4,12 +4,13 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration {
+return new class extends Migration
+{
     public function up(): void
     {
         if (Schema::hasTable('todos')) {
             Schema::table('todos', function (Blueprint $table) {
-                if (!Schema::hasColumn('todos', 'last_generated_at')) {
+                if (! Schema::hasColumn('todos', 'last_generated_at')) {
                     $table->date('last_generated_at')->nullable()->after('recurrence');
                 }
             });

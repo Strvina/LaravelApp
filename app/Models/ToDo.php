@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class ToDo extends Model
@@ -13,13 +13,13 @@ class ToDo extends Model
     protected $table = 'todos';
 
     protected $fillable = [
-        "task",
-        "status",
-        "user_id",
-        "priority",
-        "is_recurring",
-        "recurrence",
-        "last_generated_at",
+        'task',
+        'status',
+        'user_id',
+        'priority',
+        'is_recurring',
+        'recurrence',
+        'last_generated_at',
     ];
 
     protected $casts = [
@@ -31,6 +31,7 @@ class ToDo extends Model
     {
         return $this->belongsTo(User::class);
     }
+
     // Scope vraca sve zadatke koje korisnik poseduje
     public function scopeOwnedBy($query, $userId)
     {
@@ -41,6 +42,12 @@ class ToDo extends Model
     public function scopeOwnedByKey($query, $userId, $id)
     {
         return $query->where('user_id', $userId)->whereKey($id);
+    }
+
+    // Admin vidi sve, obican korisnik samo svoje
+    public function scopeVisibleTo($query, User $user)
+    {
+        return $user->isAdmin() ? $query : $query->ownedBy($user->id);
     }
 
     // Scope za filter po statusu (opcionalno)
@@ -65,7 +72,7 @@ class ToDo extends Model
     public function scopeSearch($query, $search)
     {
         if ($search) {
-            return $query->where('task', 'like', '%' . $search . '%');
+            return $query->where('task', 'like', '%'.$search.'%');
         }
 
         return $query;

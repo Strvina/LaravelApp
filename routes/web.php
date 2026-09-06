@@ -25,11 +25,22 @@ Route::middleware('auth')->group(function () {
     Route::get('/homepage', [HomepageController::class, 'index'])->name('homepage');
 
     Route::get('/proizvodi', [ProductController::class, 'allProducts'])->name('products.all');
-    Route::get('/proizvod/{productName}', [ProductController::class, 'index'])->name('product.single');
     Route::get('/products/export', [ProductController::class, 'export'])->name('products.export');
+    Route::get('/products/import-template', [ProductController::class, 'template'])
+        ->middleware(AdminMiddleware::class)
+        ->name('products.template');
+    Route::get('/products/trash', [ProductController::class, 'trash'])
+        ->middleware(AdminMiddleware::class)
+        ->name('products.trash');
     Route::post('/products/import', [ProductController::class, 'import'])
         ->middleware(AdminMiddleware::class)
         ->name('products.import');
+    Route::patch('/product/{id}/restore', [ProductController::class, 'restore'])
+        ->middleware(AdminMiddleware::class)
+        ->name('product.restore');
+    Route::delete('/product/{id}/force', [ProductController::class, 'forceDelete'])
+        ->middleware(AdminMiddleware::class)
+        ->name('product.force-delete');
     Route::get('/product/{id}/edit', [ProductController::class, 'edit'])
         ->middleware(AdminMiddleware::class)
         ->name('product.edit');
@@ -42,6 +53,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/product/delete/{id}', [ProductController::class, 'delete'])
         ->middleware(AdminMiddleware::class)
         ->name('product.delete');
+    Route::get('/proizvod/{product:slug}', [ProductController::class, 'show'])->name('product.single');
 
     Route::get('/contact', [ContactController::class, 'index'])->name('contact.index');
     Route::post('/contact/send', [ContactController::class, 'send'])->name('contact.send');
@@ -56,6 +68,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/pages/expenses', [ExpenseController::class, 'index'])->name('expenses.index');
     Route::get('/expenses/export', [ExpenseController::class, 'export'])->name('expenses.export');
     Route::post('/pages/expenses/add', [ExpenseController::class, 'addExpense'])->name('expenses.add');
+    Route::get('/pages/expenses/{id}/edit', [ExpenseController::class, 'edit'])->name('expenses.edit');
+    Route::put('/pages/expenses/{id}', [ExpenseController::class, 'update'])->name('expenses.update');
     Route::delete('/pages/expenses/delete/{id}', [ExpenseController::class, 'deleteExpense'])->name('expenses.delete');
 
     Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
@@ -69,4 +83,4 @@ Route::middleware(['auth', AdminMiddleware::class])->group(function () {
     Route::resource('admin/users', UserController::class, ['as' => 'admin'])->only(['index', 'edit', 'update', 'destroy']);
 });
 
-require __DIR__ . '/auth.php';
+require __DIR__.'/auth.php';

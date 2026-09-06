@@ -14,12 +14,10 @@ class StoreExpenseRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "name"=>"required|string|max:255",
-            "amount"=>"required|numeric",
-            "type"=>"required|in:income,expense",
-            "date"=>"required|date"
+            'name' => 'required|string|max:255',
+            'amount' => 'required|numeric|min:0',
+            'type' => 'required|in:income,expense',
+            'date' => 'required|date',
         ];
-
-
     }
 }

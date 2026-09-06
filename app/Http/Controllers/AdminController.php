@@ -16,11 +16,11 @@ class AdminController extends Controller
     {
         $totalUsers = User::count();
         $totalProducts = Products::count();
-        $monthlyRevenue = Expense::where('type', 'income')->whereMonth('date', now()->month)->sum('amount');
-        $monthlyExpense = Expense::where('type', 'expense')->whereMonth('date', now()->month)->sum('amount');
+        $monthlyRevenue = Expense::where('type', 'income')->whereYear('date', now()->year)->whereMonth('date', now()->month)->sum('amount');
+        $monthlyExpense = Expense::where('type', 'expense')->whereYear('date', now()->year)->whereMonth('date', now()->month)->sum('amount');
         $activeTasks = ToDo::where('status', 'pending')->count();
         $completedTasksCount = ToDo::where('status', 'completed')->count();
-        $lowStockCount = Products::where('stock', '<=', 5)->count();
+        $lowStockCount = Products::lowStock()->count();
         $activityCount = ActivityLog::count();
         $netBalance = Expense::where('type', 'income')->sum('amount') - Expense::where('type', 'expense')->sum('amount');
 
@@ -28,10 +28,12 @@ class AdminController extends Controller
         $expensesPerMonth = [];
         $completedTasks = [];
 
+        $currentYear = now()->year;
+
         for ($i = 1; $i <= 12; $i++) {
-            $userSignups[] = User::whereMonth('created_at', $i)->count();
-            $expensesPerMonth[] = Expense::where('type', 'expense')->whereMonth('date', $i)->sum('amount');
-            $completedTasks[] = ToDo::where('status', 'completed')->whereMonth('updated_at', $i)->count();
+            $userSignups[] = User::whereYear('created_at', $currentYear)->whereMonth('created_at', $i)->count();
+            $expensesPerMonth[] = Expense::where('type', 'expense')->whereYear('date', $currentYear)->whereMonth('date', $i)->sum('amount');
+            $completedTasks[] = ToDo::where('status', 'completed')->whereYear('updated_at', $currentYear)->whereMonth('updated_at', $i)->count();
         }
 
         $months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];

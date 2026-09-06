@@ -12,17 +12,15 @@ class ExpenseApiController extends Controller
 {
     public function index(Request $request): JsonResponse
     {
-        $query = Expense::query()->latest('date');
-
-        if (!$request->user()->isAdmin()) {
-            $query->ownedBy($request->user()->id);
-        }
+        $query = Expense::query()->latest('date')->visibleTo($request->user());
 
         return response()->json($query->paginate(15));
     }
 
     public function store(StoreExpenseRequest $request): JsonResponse
     {
+        $this->authorize('create', Expense::class);
+
         $expense = Expense::create([
             ...$request->validated(),
             'user_id' => $request->user()->id,

@@ -20,7 +20,7 @@ class GenerateRecurringTasks extends Command
             ->whereNotNull('recurrence')
             ->chunkById(100, function ($tasks) use (&$created): void {
                 foreach ($tasks as $task) {
-                    if (!$this->isDue($task)) {
+                    if (! $this->isDue($task)) {
                         continue;
                     }
 
@@ -46,7 +46,7 @@ class GenerateRecurringTasks extends Command
 
     private function isDue(ToDo $task): bool
     {
-        if (!$task->last_generated_at) {
+        if (! $task->last_generated_at) {
             return true;
         }
 

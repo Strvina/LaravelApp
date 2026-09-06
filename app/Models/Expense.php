@@ -9,14 +9,17 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Expense extends Model
 {
     use HasFactory, SoftDeletes;
-    protected $table = "expenses";
+
+    protected $table = 'expenses';
+
     protected $fillable = [
         'name',
         'amount',
         'type',
         'date',
-        'user_id'
+        'user_id',
     ];
+
     public function user()
     {
         return $this->belongsTo(User::class);
@@ -34,15 +37,29 @@ class Expense extends Model
         return $query->where('user_id', $userId)->whereKey($id);
     }
 
+    // Admin vidi sve, obican korisnik samo svoje
+    public function scopeVisibleTo($query, User $user)
+    {
+        return $user->isAdmin() ? $query : $query->ownedBy($user->id);
+    }
+
     // Scope za filter po tipu ('income' ili 'expense')
     public function scopeOfType($query, $type)
     {
-        return $query->where('type', $type);
+        if ($type !== null && $type !== '') {
+            return $query->where('type', $type);
+        }
+
+        return $query;
     }
 
     // Scope za mesec (month 1-12)
     public function scopeMonth($query, $month)
     {
-        return $query->whereMonth('date', $month);
+        if ($month !== null && $month !== '') {
+            return $query->whereMonth('date', $month);
+        }
+
+        return $query;
     }
 }

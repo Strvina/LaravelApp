@@ -16,9 +16,10 @@ class AdminMiddleware
     public function handle(Request $request, Closure $next): Response
     {
         $user = $request->user();
-        if (!$user || !method_exists($user, 'isAdmin') || !$user->isAdmin()) {
+        if (! $user || ! method_exists($user, 'isAdmin') || ! $user->isAdmin()) {
             abort(403, 'Admin access only');
         }
+
         return $next($request);
     }
 }

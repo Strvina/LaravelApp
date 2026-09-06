@@ -12,13 +12,15 @@ class UserController extends Controller
 {
     public function index()
     {
+        $this->authorize('viewAny', User::class);
+
         $search = request('search');
 
         $users = User::query()
             ->when($search, function ($query, $searchTerm) {
                 $query->where(function ($nestedQuery) use ($searchTerm) {
-                    $nestedQuery->where('name', 'like', '%' . $searchTerm . '%')
-                        ->orWhere('email', 'like', '%' . $searchTerm . '%');
+                    $nestedQuery->where('name', 'like', '%'.$searchTerm.'%')
+                        ->orWhere('email', 'like', '%'.$searchTerm.'%');
                 });
             })
             ->orderBy('name')
@@ -29,11 +31,15 @@ class UserController extends Controller
 
     public function edit(User $user)
     {
+        $this->authorize('update', $user);
+
         return view('admin.users.edit', compact('user'));
     }
 
     public function update(Request $request, User $user)
     {
+        $this->authorize('update', $user);
+
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
@@ -61,6 +67,8 @@ class UserController extends Controller
                 ->route('admin.users.index')
                 ->with('error', 'You cannot delete your own account from the admin panel.');
         }
+
+        $this->authorize('delete', $user);
 
         $oldValues = $user->only(['name', 'email', 'role']);
         $user->delete();

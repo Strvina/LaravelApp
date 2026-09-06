@@ -30,7 +30,7 @@
         </div>
 
         <div class="mt-6 flex flex-wrap gap-3">
-            <a href="{{ route('product.single', ['productName' => $product->name]) }}" class="secondary-btn">View details</a>
+            <a href="{{ route('product.single', ['product' => $product->slug]) }}" class="secondary-btn">View details</a>
             @if (auth()->user()->isAdmin())
                 <a href="{{ route('product.edit', $product->id) }}" class="secondary-btn">Edit</a>
                 <form method="POST" action="{{ route('product.delete', $product->id) }}">

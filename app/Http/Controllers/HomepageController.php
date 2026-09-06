@@ -12,13 +12,8 @@ class HomepageController extends Controller
     public function index()
     {
         $user = Auth::user();
-        $todoQuery = ToDo::query();
-        $expenseQuery = Expense::query();
-
-        if (!$user->isAdmin()) {
-            $todoQuery->ownedBy($user->id);
-            $expenseQuery->ownedBy($user->id);
-        }
+        $todoQuery = ToDo::query()->visibleTo($user);
+        $expenseQuery = Expense::query()->visibleTo($user);
 
         return view('pages.homepage', [
             'name' => $user->name,
@@ -33,7 +28,7 @@ class HomepageController extends Controller
             ],
             'productStats' => [
                 'total' => Products::count(),
-                'low_stock' => Products::where('stock', '<=', 5)->count(),
+                'low_stock' => Products::lowStock()->count(),
             ],
             'recentTasks' => (clone $todoQuery)->latest()->limit(5)->get(),
         ]);

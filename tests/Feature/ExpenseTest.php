@@ -2,10 +2,10 @@
 
 namespace Tests\Feature;
 
-use Tests\TestCase;
-use App\Models\User;
 use App\Models\Expense;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
 class ExpenseTest extends TestCase
 {
@@ -40,7 +40,7 @@ class ExpenseTest extends TestCase
         $response = $this->delete(route('expenses.delete', $expense->id));
 
         $response->assertRedirect(route('expenses.index'));
-        $this->assertDatabaseMissing('expenses', ['id' => $expense->id]);
+        $this->assertSoftDeleted('expenses', ['id' => $expense->id]);
     }
 
     public function test_guest_cannot_add_or_delete_expense(): void

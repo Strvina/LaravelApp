@@ -13,12 +13,7 @@ class TodoApiController extends Controller
 {
     public function index(Request $request): JsonResponse
     {
-        $user = $request->user();
-        $query = ToDo::query()->latest();
-
-        if (!$user->isAdmin()) {
-            $query->ownedBy($user->id);
-        }
+        $query = ToDo::query()->latest()->visibleTo($request->user());
 
         return response()->json($query->paginate(15));
     }

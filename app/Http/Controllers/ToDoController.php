@@ -23,20 +23,20 @@ class ToDoController extends Controller
             'scope' => ['nullable', 'in:all,mine'],
         ]);
 
-        $query = ToDo::query()
+        $baseQuery = ToDo::query()
             ->with('user')
             ->search($filters['search'] ?? null)
-            ->status($filters['status'] ?? null)
             ->priority($filters['priority'] ?? null);
 
-        if (!$user->isAdmin() || ($filters['scope'] ?? null) === 'mine') {
-            $query->ownedBy($user->id);
+        if (! $user->isAdmin() || ($filters['scope'] ?? null) === 'mine') {
+            $baseQuery->ownedBy($user->id);
         }
 
-        $query->orderBy('created_at', ($filters['sort'] ?? 'newest') === 'oldest' ? 'asc' : 'desc');
+        $tableQuery = (clone $baseQuery)->status($filters['status'] ?? null)
+            ->orderBy('created_at', ($filters['sort'] ?? 'newest') === 'oldest' ? 'asc' : 'desc');
 
-        $todo = (clone $query)->paginate(10)->withQueryString();
-        $boardTodo = (clone $query)->get();
+        $todo = $tableQuery->paginate(10)->withQueryString();
+        $boardTodo = (clone $baseQuery)->orderBy('created_at', 'desc')->get();
 
         return view('pages.todo.index', [
             'todo' => $todo,

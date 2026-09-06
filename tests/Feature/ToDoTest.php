@@ -49,7 +49,7 @@ class ToDoTest extends TestCase
         $response = $this->actingAs($user)->delete(route('todo.delete', $todo->id));
         $response->assertRedirect(route('todo.index'));
 
-        $this->assertDatabaseMissing('todos', [
+        $this->assertSoftDeleted('todos', [
             'id' => $todo->id,
         ]);
     }
@@ -177,6 +177,19 @@ class ToDoTest extends TestCase
 
         $response->assertOk();
         $response->assertSee('Visible to admin');
+    }
+
+    public function test_kanban_board_shows_all_statuses_even_when_table_is_filtered(): void
+    {
+        $user = User::factory()->create();
+        ToDo::factory()->create(['user_id' => $user->id, 'status' => 'pending', 'task' => 'Pending task']);
+        ToDo::factory()->create(['user_id' => $user->id, 'status' => 'completed', 'task' => 'Completed task']);
+
+        $response = $this->actingAs($user)->get(route('todo.index', ['status' => 'pending']));
+
+        $response->assertOk();
+        $response->assertSee('Pending task');
+        $response->assertSee('Completed task');
     }
 
     public function test_recurring_todo_requires_recurrence(): void
