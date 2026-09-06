@@ -68,7 +68,7 @@
                 <div class="panel">
                     <h2 class="section-title">Newest users</h2>
                     <div class="mt-4 space-y-3">
-                        @foreach ($recentUsers as $user)
+                        @forelse ($recentUsers as $user)
                             <div class="flex items-center justify-between rounded-2xl border border-slate-200 px-4 py-3">
                                 <div>
                                     <p class="font-semibold text-slate-900">{{ $user->name }}</p>
@@ -78,14 +78,18 @@
                                     {{ ucfirst($user->role) }}
                                 </span>
                             </div>
-                        @endforeach
+                        @empty
+                            <div class="rounded-2xl border border-dashed border-slate-200 bg-white p-6 text-sm text-slate-500">
+                                No users yet.
+                            </div>
+                        @endforelse
                     </div>
                 </div>
 
                 <div class="panel">
                     <h2 class="section-title">Latest inventory items</h2>
                     <div class="mt-4 space-y-3">
-                        @foreach ($recentProducts as $product)
+                        @forelse ($recentProducts as $product)
                             <div class="flex items-center justify-between rounded-2xl border border-slate-200 px-4 py-3">
                                 <div>
                                     <p class="font-semibold text-slate-900">{{ $product->name }}</p>
@@ -95,7 +99,11 @@
                                     {{ $product->stock }} units
                                 </span>
                             </div>
-                        @endforeach
+                        @empty
+                            <div class="rounded-2xl border border-dashed border-slate-200 bg-white p-6 text-sm text-slate-500">
+                                No products yet.
+                            </div>
+                        @endforelse
                     </div>
                 </div>
             </div>

@@ -24,6 +24,9 @@
                         <label for="task" class="field-label">Task name</label>
                         <input type="text" name="task" id="task" value="{{ old('task') }}" required
                             class="text-input" placeholder="Prepare monthly inventory review">
+                        @error('task')
+                            <p class="field-error">{{ $message }}</p>
+                        @enderror
                     </div>
 
                     <div class="grid gap-4 md:grid-cols-2">
@@ -34,6 +37,9 @@
                                 <option value="medium" {{ old('priority') == 'medium' ? 'selected' : '' }}>Medium</option>
                                 <option value="high" {{ old('priority') == 'high' ? 'selected' : '' }}>High</option>
                             </select>
+                            @error('priority')
+                                <p class="field-error">{{ $message }}</p>
+                            @enderror
                         </div>
 
                         <div>
@@ -45,6 +51,9 @@
                                 <option value="monthly" {{ old('recurrence') == 'monthly' ? 'selected' : '' }}>Monthly
                                 </option>
                             </select>
+                            @error('recurrence')
+                                <p class="field-error">{{ $message }}</p>
+                            @enderror
                         </div>
                     </div>
 

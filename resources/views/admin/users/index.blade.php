@@ -33,7 +33,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($users as $user)
+                        @forelse ($users as $user)
                             <tr class="border-b border-slate-100">
                                 <td class="px-3 py-4 text-slate-500">{{ $user->id }}</td>
                                 <td class="px-3 py-4 font-medium text-slate-900">{{ $user->name }}</td>
@@ -57,7 +57,13 @@
                                     </div>
                                 </td>
                             </tr>
-                        @endforeach
+                        @empty
+                            <tr>
+                                <td colspan="6" class="px-3 py-8 text-center text-slate-500">
+                                    No users match that search.
+                                </td>
+                            </tr>
+                        @endforelse
                     </tbody>
                 </table>
             </div>

@@ -43,7 +43,8 @@
                 <a href="{{ route('products.all') }}" class="secondary-btn">Back to catalog</a>
                 @if (auth()->user()->isAdmin())
                     <a href="{{ route('product.edit', $product->id) }}" class="secondary-btn">Edit product</a>
-                    <form method="POST" action="{{ route('product.delete', $product->id) }}">
+                    <form method="POST" action="{{ route('product.delete', $product->id) }}"
+                        onsubmit="return confirm('Delete this product? It can be restored from the trash later.');">
                         @csrf
                         @method('DELETE')
                         <button type="submit" class="danger-btn">Delete product</button>

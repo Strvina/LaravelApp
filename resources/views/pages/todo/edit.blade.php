@@ -19,6 +19,9 @@
                 <div>
                     <label for="task" class="field-label">Task name</label>
                     <input type="text" name="task" id="task" value="{{ old('task', $todo->task) }}" class="text-input">
+                    @error('task')
+                        <p class="field-error">{{ $message }}</p>
+                    @enderror
                 </div>
 
                 <div class="grid gap-4 md:grid-cols-2">
@@ -29,6 +32,9 @@
                             <option value="medium" @selected(old('priority', $todo->priority) === 'medium')>Medium</option>
                             <option value="high" @selected(old('priority', $todo->priority) === 'high')>High</option>
                         </select>
+                        @error('priority')
+                            <p class="field-error">{{ $message }}</p>
+                        @enderror
                     </div>
 
                     <div>
@@ -39,6 +45,9 @@
                             <option value="weekly" @selected(old('recurrence', $todo->recurrence) === 'weekly')>Weekly</option>
                             <option value="monthly" @selected(old('recurrence', $todo->recurrence) === 'monthly')>Monthly</option>
                         </select>
+                        @error('recurrence')
+                            <p class="field-error">{{ $message }}</p>
+                        @enderror
                     </div>
                 </div>
 

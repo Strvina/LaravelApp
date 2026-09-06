@@ -61,6 +61,16 @@ document.addEventListener('DOMContentLoaded', () => {
         card.classList.add('task-card-dragging');
     };
 
+    const showDndError = message => {
+        const toast = document.createElement('div');
+        toast.className =
+            'flash-error fixed left-1/2 top-6 z-[100] -translate-x-1/2 rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm font-medium text-rose-800 shadow-lg';
+        toast.textContent = message;
+        document.body.appendChild(toast);
+
+        window.setTimeout(() => toast.remove(), 4000);
+    };
+
     const updateTaskStatus = status => {
         if (!draggedTaskId || !status) {
             resetDraggedState();
@@ -78,7 +88,13 @@ document.addEventListener('DOMContentLoaded', () => {
             .then(response => {
                 if (response.ok) {
                     location.reload();
+                    return;
                 }
+
+                showDndError("Couldn't update the task status. Please try again.");
+            })
+            .catch(() => {
+                showDndError('Network error — the task status was not updated.');
             })
             .finally(() => {
                 resetDraggedState();

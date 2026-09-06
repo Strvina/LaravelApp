@@ -36,17 +36,26 @@
 
                     <div>
                         <label for="name" class="field-label">Name</label>
-                        <input type="text" name="name" id="name" class="text-input" placeholder="Office rent" required>
+                        <input type="text" name="name" id="name" value="{{ old('name') }}" class="text-input" placeholder="Office rent" required>
+                        @error('name')
+                            <p class="field-error">{{ $message }}</p>
+                        @enderror
                     </div>
 
                     <div class="grid gap-4 md:grid-cols-2">
                         <div>
                             <label for="amount" class="field-label">Amount</label>
-                            <input type="number" step="0.01" name="amount" id="amount" class="text-input" placeholder="0.00" required>
+                            <input type="number" step="0.01" name="amount" id="amount" value="{{ old('amount') }}" class="text-input" placeholder="0.00" required>
+                            @error('amount')
+                                <p class="field-error">{{ $message }}</p>
+                            @enderror
                         </div>
                         <div>
                             <label for="date" class="field-label">Date</label>
-                            <input type="date" name="date" id="date" class="text-input" required>
+                            <input type="date" name="date" id="date" value="{{ old('date') }}" class="text-input" required>
+                            @error('date')
+                                <p class="field-error">{{ $message }}</p>
+                            @enderror
                         </div>
                     </div>
 
@@ -54,14 +63,17 @@
                         <span class="field-label">Type</span>
                         <div class="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
                             <label class="inline-flex w-full items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-700 sm:w-auto">
-                                <input type="radio" name="type" value="income" checked>
+                                <input type="radio" name="type" value="income" @checked(old('type', 'income') === 'income')>
                                 Income
                             </label>
                             <label class="inline-flex w-full items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-700 sm:w-auto">
-                                <input type="radio" name="type" value="expense">
+                                <input type="radio" name="type" value="expense" @checked(old('type') === 'expense')>
                                 Expense
                             </label>
                         </div>
+                        @error('type')
+                            <p class="field-error">{{ $message }}</p>
+                        @enderror
                     </div>
 
                     <button type="submit" class="primary-btn w-full sm:w-auto">Add transaction</button>
@@ -145,7 +157,8 @@
                                     <td class="px-3 py-4">
                                         <div class="flex flex-wrap gap-2">
                                             <a href="{{ route('expenses.edit', $expense->id) }}" class="secondary-btn whitespace-nowrap">Edit</a>
-                                            <form method="POST" action="{{ route('expenses.delete', $expense) }}">
+                                            <form method="POST" action="{{ route('expenses.delete', $expense) }}"
+                                                onsubmit="return confirm('Delete this transaction? This cannot be undone.');">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="danger-btn whitespace-nowrap">Delete</button>

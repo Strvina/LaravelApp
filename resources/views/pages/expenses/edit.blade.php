@@ -19,16 +19,25 @@
                 <div class="md:col-span-2">
                     <label for="name" class="field-label">Name</label>
                     <input id="name" name="name" type="text" value="{{ old('name', $expense->name) }}" class="text-input">
+                    @error('name')
+                        <p class="field-error">{{ $message }}</p>
+                    @enderror
                 </div>
 
                 <div>
                     <label for="amount" class="field-label">Amount</label>
                     <input id="amount" name="amount" type="number" step="0.01" value="{{ old('amount', $expense->amount) }}" class="text-input">
+                    @error('amount')
+                        <p class="field-error">{{ $message }}</p>
+                    @enderror
                 </div>
 
                 <div>
                     <label for="date" class="field-label">Date</label>
                     <input id="date" name="date" type="date" value="{{ old('date', $expense->date) }}" class="text-input">
+                    @error('date')
+                        <p class="field-error">{{ $message }}</p>
+                    @enderror
                 </div>
 
                 <div class="md:col-span-2">

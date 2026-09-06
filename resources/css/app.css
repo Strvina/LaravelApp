@@ -64,11 +64,19 @@
     }
 
     .text-input {
-        @apply w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-amber-400 focus:ring-2 focus:ring-amber-100;
+        @apply w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-amber-400 focus:ring-2 focus:ring-amber-100 disabled:cursor-not-allowed disabled:opacity-60;
     }
 
     .select-input {
-        @apply w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-amber-400 focus:ring-2 focus:ring-amber-100;
+        @apply w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-amber-400 focus:ring-2 focus:ring-amber-100 disabled:cursor-not-allowed disabled:opacity-60;
+    }
+
+    .field-error {
+        @apply mt-2 text-sm font-medium text-rose-600;
+    }
+
+    .status-message {
+        @apply text-sm font-medium text-emerald-700;
     }
 
     .primary-btn {
@@ -274,5 +282,13 @@
         border-color: rgba(244, 63, 94, 0.18);
         background-color: rgba(76, 5, 25, 0.35);
         color: #fecdd3;
+    }
+
+    html.dark .field-error {
+        color: #fda4af;
+    }
+
+    html.dark .status-message {
+        color: #6ee7b7;
     }
 }
